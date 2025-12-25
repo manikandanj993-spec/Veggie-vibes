@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresh Veggies & Fruits | Online Store</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8}
+header{background:#2e7d32;color:#fff;padding:15px;text-align:center}
+.container{padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px}
+.card{background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.card svg{width:100%;height:120px;border-radius:8px;background:#e8f5e9}
+.price{color:#2e7d32;font-weight:bold}
+.qty{width:60px;padding:5px;margin-top:5px}
+.btn{background:#2e7d32;color:#fff;border:none;border-radius:6px;padding:8px 12px;margin:4px;cursor:pointer}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #2e7d32;padding:10px;display:flex;justify-content:space-between;align-items:center;z-index:10}
+footer{background:#333;color:#fff;text-align:center;padding:10px;margin-top:90px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Fresh Veggies & Fruits</h1>
+<p>Online Vegetable & Fruit Store | COD & UPI</p>
+</header>
+
+<div class="container">
+<h2>Shop Now</h2>
+<div class="grid" id="productGrid"></div>
+</div>
+
+<div class="cart">
+<strong>Total: ₹<span id="total">0</span></strong>
+<div>
+<button class="btn" onclick="orderCOD()">Cash on Delivery</button>
+<button class="btn" onclick="payUPI()">Pay via UPI</button>
+</div>
+</div>
+
+<footer>
+<p>© 2025 Fresh Veggies & Fruits | WhatsApp: 8148070676</p>
+</footer>
+
+<script>
+/*
+IMPORTANT FIX:
+Images are replaced with INLINE SVG (not external, not base64, not CDN).
+SVG inside HTML is 100% GitHub Pages compatible and NEVER breaks.
+*/
+
+const productNames = [
+ 'Tomato','Potato','Onion','Carrot','Cabbage','Cauliflower','Beans','Brinjal','Beetroot','Pumpkin',
+ 'Drumstick','Spinach','Coriander','Mint','Ginger','Garlic','Green Chilli','Capsicum','Apple','Banana',
+ 'Orange','Grapes','Pineapple','Mango','Papaya','Guava','Watermelon','Pomegranate','Lemon','Cucumber',
+ 'Bottle Gourd','Ridge Gourd','Snake Gourd','Sweet Corn','Peas','Mushroom','Radish','Turnip','Pear','Strawberry',
+ 'Kiwi','Chikoo','Custard Apple','Blueberry','Avocado','Peach','Plum','Dates','Fig','Jackfruit'
+];
+
+const products = productNames.map(name=>({name,price:50}));
+const grid = document.getElementById('productGrid');
+
+products.forEach((p,i)=>{
+ grid.innerHTML += `
+ <div class="card">
+   <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+     <rect width="400" height="300" rx="20" ry="20" fill="#c8e6c9" />
+     <text x="200" y="150" text-anchor="middle" dominant-baseline="middle" font-size="28" fill="#2e7d32" font-weight="bold">${p.name}</text>
+   </svg>
+   <h4>${p.name}</h4>
+   <p class="price">₹${p.price} / kg</p>
+   <input class="qty" type="number" min="0" value="0" id="q${i}" onchange="calc()">
+ </div>`;
+});
+
+function calc(){
+ let total=0;
+ products.forEach((p,i)=>{
+   total += Number(document.getElementById('q'+i).value) * p.price;
+ });
+ document.getElementById('total').innerText = total;
+}
+
+function buildMsg(){
+ let msg='Order Details:%0A';
+ products.forEach((p,i)=>{
+   let q=document.getElementById('q'+i).value;
+   if(q>0) msg+=`${p.name} - ${q}kg%0A`;
+ });
+ msg+=`Total: ₹${document.getElementById('total').innerText}`;
+ return msg;
+}
+
+function orderCOD(){
+ window.open(`https://wa.me/918148070676?text=${buildMsg()}`,'_blank');
+}
+
+/*
+UPI NOTE (IMPORTANT):
+UPI works ONLY on mobile devices with UPI apps installed.
+Desktop browsers cannot open UPI apps.
+*/
+function payUPI(){
+ const amount=document.getElementById('total').innerText;
+ if(amount==0){ alert('Please add items to cart'); return; }
+ const upiURL = `upi://pay?pa=manikandanj993-1@okicici&pn=FreshVeggies&am=${amount}&cu=INR`;
+ window.location.href = upiURL;
+}
+</script>
+
+</body>
+</html>
+
+
+
+
