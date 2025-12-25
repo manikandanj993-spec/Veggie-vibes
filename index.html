@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veggie Vibes - Fresh Vegetables & Fruits</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5; }
+header { background:#4CAF50; color:white; padding:15px; text-align:center; }
+.container { padding:20px; }
+.product { display:inline-block; width:200px; margin:10px; background:white; padding:10px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.2); text-align:center; }
+.product img { width:180px; height:150px; border-radius:5px; }
+.product button { background:#4CAF50; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; margin-top:5px; }
+footer { background:#333; color:white; text-align:center; padding:15px; margin-top:20px; }
+.actions { margin-top:10px; text-align:center; }
+.actions button { margin:5px; padding:10px 15px; }
+iframe { border:0; margin-top:20px; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Veggie Vibes 🥦🍎</h1>
+<p>Fresh Vegetables & Fruits | Chennai</p>
+</header>
+
+<div class="container" id="products"></div>
+
+<div class="actions">
+<button onclick="generateInvoice()">🧾 Generate Bill</button>
+<button onclick="payUPI()">💳 Pay via UPI</button>
+<a id="whatsappLink" href="#" target="_blank"><button>📲 Order on WhatsApp</button></a>
+</div>
+
+<div style="padding:15px;background:#e8f5e9">
+<h3>📍 Find Us on Google Maps</h3>
+<iframe src="https://www.google.com/maps?q=Royapettah,Chennai&output=embed" width="100%" height="250"></iframe>
+</div>
+
+<footer>
+<p>Veggie Vibes | Phone: 8148070676</p>
+<p>&copy; 2025 Veggie Vibes</p>
+</footer>
+
+<script>
+// PRODUCT LIST
+const products=[
+{name:'Tomato',price:30,img:'images/tomato.jpg'},
+{name:'Onion',price:35,img:'images/onion.jpg'},
+{name:'Potato',price:30,img:'images/potato.jpg'},
+{name:'Carrot',price:40,img:'images/carrot.jpg'},
+{name:'Beetroot',price:45,img:'images/beetroot.jpg'},
+{name:'Cabbage',price:35,img:'images/cabbage.jpg'},
+{name:'Cauliflower',price:45,img:'images/cauliflower.jpg'},
+{name:'Brinjal',price:40,img:'images/brinjal.jpg'},
+{name:'Lady Finger',price:45,img:'images/ladyfinger.jpg'},
+{name:'Green Chilli',price:60,img:'images/greenchilli.jpg'},
+{name:'Capsicum',price:60,img:'images/capsicum.jpg'},
+{name:'Cucumber',price:30,img:'images/cucumber.jpg'},
+{name:'Pumpkin',price:25,img:'images/pumpkin.jpg'},
+{name:'Drumstick',price:70,img:'images/drumstick.jpg'},
+{name:'Bottle Gourd',price:30,img:'images/bottlegourd.jpg'},
+{name:'Ridge Gourd',price:40,img:'images/ridgegourd.jpg'},
+{name:'Radish',price:30,img:'images/radish.jpg'},
+{name:'Spinach',price:20,img:'images/spinach.jpg'},
+{name:'Coriander',price:15,img:'images/coriander.jpg'},
+{name:'Mint',price:15,img:'images/mint.jpg'},
+{name:'Garlic',price:120,img:'images/garlic.jpg'},
+{name:'Ginger',price:90,img:'images/ginger.jpg'},
+{name:'Apple',price:160,img:'images/apple.jpg'},
+{name:'Banana',price:60,img:'images/banana.jpg'},
+{name:'Orange',price:80,img:'images/orange.jpg'},
+{name:'Grapes',price:90,img:'images/grapes.jpg'},
+{name:'Mango',price:120,img:'images/mango.jpg'},
+{name:'Pineapple',price:70,img:'images/pineapple.jpg'},
+{name:'Papaya',price:40,img:'images/papaya.jpg'},
+{name:'Watermelon',price:30,img:'images/watermelon.jpg'},
+{name:'Pomegranate',price:140,img:'images/pomegranate.jpg'},
+{name:'Guava',price:50,img:'images/guava.jpg'},
+{name:'Kiwi',price:180,img:'images/kiwi.jpg'},
+{name:'Strawberry',price:200,img:'images/strawberry.jpg'},
+{name:'Chikoo',price:60,img:'images/chikoo.jpg'},
+{name:'Custard Apple',price:90,img:'images/custardapple.jpg'},
+{name:'Dragon Fruit',price:160,img:'images/dragonfruit.jpg'},
+{name:'Pear',price:110,img:'images/pear.jpg'},
+{name:'Lemon',price:70,img:'images/lemon.jpg'},
+{name:'Avocado',price:180,img:'images/avocado.jpg'},
+{name:'Cherry',price:260,img:'images/cherry.jpg'},
+{name:'Jackfruit',price:40,img:'images/jackfruit.jpg'}
+];
+
+const container=document.getElementById('products');
+const cart=[];
+
+// DISPLAY PRODUCTS
+products.forEach(p=>{
+  const div=document.createElement('div');
+  div.className='product';
+  div.innerHTML=`<img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><p>₹${p.price} per kg</p><input type="number" min="1" value="1" id="qty-${p.name}"><button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>`;
+  container.appendChild(div);
+});
+
+// ADD TO CART
+function addToCart(name,price){
+  const qty=parseInt(document.getElementById(`qty-${name}`).value);
+  cart.push({name,price,qty});
+  updateWhatsAppLink();
+  alert(`${name} added to cart!`);
+}
+
+// UPDATE WHATSAPP LINK
+function updateWhatsAppLink(){
+  let text='Veggie Vibes Order:%0A';
+  cart.forEach(i=>{text+=`${i.name} x ${i.qty} kg - ₹${i.price*i.qty}%0A`;});
+  const url=`https://wa.me/918148070676?text=${text}`;
+  document.getElementById('whatsappLink').href=url;
+}
+
+// GENERATE INVOICE
+function generateInvoice(){
+  if(cart.length===0){alert('Cart is empty'); return;}
+  let win=window.open('','Invoice','width=800,height=600');
+  let rows=''; let total=0;
+  cart.forEach(i=>{let amt=i.price*i.qty; total+=amt; rows+=`<tr><td>${i.name}</td><td>${i.qty} kg</td><td>₹${amt}</td></tr>`});
+  win.document.write(`<html><head><title>Invoice</title><style>body{font-family:Arial}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:8px}</style></head><body><h2>Veggie Vibes</h2><p>Chennai | Phone: 8148070676</p><table><tr><th>Item</th><th>Qty</th><th>Amount</th></tr>${rows}<tr><th colspan='2'>Total</th><th>₹${total}</th></tr></table><p>Thank you for your order!</p><button onclick='window.print()'>Print / Save PDF</button></body></html>`);
+  win.document.close();
+}
+
+// PAY UPI
+function payUPI(){alert('UPI ID: yourupi@bank');}
+</script>
+
+</body>
+</html>
