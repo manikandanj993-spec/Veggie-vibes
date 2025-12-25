@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresh Veggies & Fruits | Online Store</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8}
+header{background:#2e7d32;color:#fff;padding:15px;text-align:center}
+.container{padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px}
+.card{background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.card svg{width:100%;height:120px;border-radius:8px;background:#e8f5e9}
+.price{color:#2e7d32;font-weight:bold}
+.qty{width:60px;padding:5px;margin-top:5px}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #2e7d32;padding:10px;display:flex;justify-content:space-between;align-items:center;z-index:10}
+.btn{background:#2e7d32;color:#fff;border:none;border-radius:6px;padding:8px 12px;margin:4px;cursor:pointer}
+.form{background:#fff;padding:15px;border-radius:10px;margin-top:20px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.form input,.form textarea{width:100%;padding:8px;margin-top:8px}
+footer{background:#333;color:#fff;text-align:center;padding:10px;margin-top:140px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Fresh Veggies & Fruits</h1>
+<p>Online Vegetable & Fruit Store | COD & WhatsApp Orders</p>
+</header>
+
+<div class="container">
+<h2>Shop & Add to Cart</h2>
+<div class="grid" id="productGrid"></div>
+
+<div class="form">
+<h3>Customer Details</h3>
+<input id="custName" placeholder="Your Name">
+<input id="custPhone" placeholder="Phone Number">
+<textarea id="custAddress" rows="3" placeholder="Delivery Address"></textarea>
+</div>
+</div>
+
+<div class="cart">
+<strong>Total: ₹<span id="total">0</span></strong>
+<button class="btn" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+</div>
+
+<footer>
+<p>© 2025 Fresh Veggies & Fruits | WhatsApp: 8148070676</p>
+</footer>
+
+<script>
+/* Inline SVG images – GitHub safe */
+const names = [
+ 'Tomato','Potato','Onion','Carrot','Cabbage','Cauliflower','Beans','Brinjal','Beetroot','Pumpkin',
+ 'Drumstick','Spinach','Coriander','Mint','Ginger','Garlic','Green Chilli','Capsicum','Apple','Banana',
+ 'Orange','Grapes','Pineapple','Mango','Papaya','Guava','Watermelon','Pomegranate','Lemon','Cucumber',
+ 'Bottle Gourd','Ridge Gourd','Snake Gourd','Sweet Corn','Peas','Mushroom','Radish','Turnip','Pear','Strawberry',
+ 'Kiwi','Chikoo','Custard Apple','Blueberry','Avocado','Peach','Plum','Dates','Fig','Jackfruit'
+];
+
+const products = names.map(n=>({name:n,price:50}));
+const grid=document.getElementById('productGrid');
+
+products.forEach((p,i)=>{
+ grid.innerHTML+=`
+ <div class='card'>
+  <svg viewBox='0 0 400 300'>
+   <rect width='400' height='300' rx='20' fill='#c8e6c9'/>
+   <text x='200' y='150' text-anchor='middle' dominant-baseline='middle' font-size='28' fill='#2e7d32'>${p.name}</text>
+  </svg>
+  <h4>${p.name}</h4>
+  <p class='price'>₹${p.price} / kg</p>
+  <input class='qty' type='number' min='0' value='0' id='q${i}' onchange='calc()'>
+ </div>`;
+});
+
+function calc(){
+ let total=0;
+ products.forEach((p,i)=>{total+=document.getElementById('q'+i).value*p.price});
+ document.getElementById('total').innerText=total;
+}
+
+function sendWhatsAppOrder(){
+ const name=document.getElementById('custName').value;
+ const phone=document.getElementById('custPhone').value;
+ const address=document.getElementById('custAddress').value;
+
+ if(!name || !phone || !address){alert('Please fill customer details');return;}
+
+ let msg='🌿 *Welcome to Fresh Veggies & Fruits* 🌿%0A%0A';
+ msg+='👤 Name: '+name+'%0A';
+ msg+='📞 Phone: '+phone+'%0A';
+ msg+='🏠 Address: '+address+'%0A%0A';
+ msg+='🛒 *Order Items*:%0A';
+
+ products.forEach((p,i)=>{
+  let q=document.getElementById('q'+i).value;
+  if(q>0) msg+=`- ${p.name}: ${q}kg%0A`;
+ });
+
+ msg+=`%0A💰 Total Amount: ₹${document.getElementById('total').innerText}`;
+ msg+='%0A%0A✅ Payment: Cash on Delivery';
+ msg+='%0A🙏 Thank you for ordering with us!';
+
+ window.open(`https://wa.me/918148070676?text=${msg}`,'_blank');
+}
+</script>
+
+</body>
+</html>
+
+
+
